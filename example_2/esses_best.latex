@@ -1,0 +1,21 @@
+% latex table generated in R 3.6.0 by xtable 1.8-4 package
+% Fri Jun  7 15:18:12 2019
+\begin{table}[ht]
+\centering
+\begin{tabular}{ll}
+  \hline
+parameter & ESS \\ 
+  \hline
+posterior & 10001 \\ 
+  likelihood & 9985 \\ 
+  prior & 8718 \\ 
+  treeLikelihood & 9985 \\ 
+  TreeHeight & 10001 \\ 
+  CoalescentExponential & 9934 \\ 
+  ePopSize & 8386 \\ 
+  growthRate & 9490 \\ 
+   \hline
+\end{tabular}
+\caption{ESSes of example 2 for best candidate model} 
+\label{tab:esses_example_2_best}
+\end{table}
