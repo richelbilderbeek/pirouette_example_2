@@ -52,9 +52,9 @@ before_script:
 
 script:
   # Delete all previous results
-  #- rm -rf example_2_314
+  - rm -rf example_2_314
   # Go!
-  #- travis_wait 60 Rscript example_2.R
+  - travis_wait 60 Rscript example_2.R
   # Check dead links
   - rm .travis.yml
   - ./scripts/check_dead_links
