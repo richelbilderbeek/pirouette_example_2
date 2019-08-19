@@ -79,8 +79,7 @@ for (i in seq_along(experiments)) {
   experiments[[i]]$est_evidence_mcmc <- create_mcmc_nested_sampling(
     chain_length = 1e7,
     store_every = 1e3,
-    epsilon = 1e-12,
-    particle_count = 10
+    epsilon = 1e-12
   )
 }
 
