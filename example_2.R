@@ -77,9 +77,10 @@ experiments <- c(list(generative_experiment), candidate_experiments)
 for (i in seq_along(experiments)) {
   experiments[[i]]$beast2_options$rng_seed <- rng_seed
   experiments[[i]]$est_evidence_mcmc <- create_mcmc_nested_sampling(
-    chain_length = 1e8,
-    store_every = 1e4,
-    epsilon = 1e-24
+    chain_length = 1e7,
+    store_every = 1e3,
+    epsilon = 1e-12,
+    n_particles = 10
   )
 }
 
