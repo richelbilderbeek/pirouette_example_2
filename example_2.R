@@ -76,6 +76,11 @@ experiments <- c(list(generative_experiment), candidate_experiments)
 # Set the RNG seed
 for (i in seq_along(experiments)) {
   experiments[[i]]$beast2_options$rng_seed <- rng_seed
+  experiments[[i]]$est_evidence_mcmc <- create_mcmc_nested_sampling(
+    chain_length = 1e7,
+    store_every = 1000,
+    epsilon = 1e-24
+  )
 }
 
 check_experiments(experiments)
