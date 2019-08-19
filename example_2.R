@@ -80,7 +80,7 @@ for (i in seq_along(experiments)) {
     chain_length = 1e7,
     store_every = 1e3,
     epsilon = 1e-12,
-    n_particles = 10
+    particle_count = 10
   )
 }
 
