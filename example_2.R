@@ -48,19 +48,6 @@ alignment_params <- create_alignment_params(
 )
 
 # JC69, strict, Yule
-generative_experiment <- create_experiment(
-  inference_conditions = create_inference_conditions(
-    model_type = "generative",
-    run_if = "always",
-    do_measure_evidence = TRUE
-  ),
-  inference_model = create_inference_model(
-    site_model = create_jc69_site_model(),
-    clock_model = create_strict_clock_model(),
-    tree_prior = create_yule_tree_prior(),
-    mcmc = create_mcmc(chain_length = 1e+07, store_every = 1000)
-  )
-)
 generative_experiment <- create_gen_experiment()
 check_experiment(generative_experiment)
 
@@ -85,7 +72,7 @@ for (i in seq_along(experiments)) {
 check_experiments(experiments)
 
 # Testing
-if (1 == 2) {
+if (1 == 1) {
   experiments <- experiments[1:2]
   for (i in seq_along(experiments)) {
     experiments[[i]]$inference_model$mcmc <- create_mcmc(chain_length = 10000, store_every = 1000)
@@ -108,14 +95,6 @@ errors <- pir_run(
   phylogeny,
   pir_params = pir_params
 )
-
-if (1 == 2) {
-  errors <- utils::read.csv(
-    file = file.path(example_folder, "errors.csv")
-  )
-  check_pir_out(errors)
-  pir_plot(pir_out = errors)
-}
 
 utils::write.csv(
   x = errors,
