@@ -50,12 +50,12 @@ candidate_experiments <- create_all_experiments(
   exclude_model = generative_experiment$inference_model
 )
 for (i in seq_along(candidate_experiments)) {
-  experiments[[i]]$beast2_options$input_filename <- "true_alignment_best.xml"
-  experiments[[i]]$beast2_options$output_state_filename <- "true_alignment_best.xml.state"
-  experiments[[i]]$inference_model$mcmc$tracelog$filename <- "true_alignment_best.log"
-  experiments[[i]]$inference_model$mcmc$treelog$filename <- "true_alignment_best.trees"
-  experiments[[i]]$inference_model$mcmc$screenlog$filename <- "true_alignment_best.csv"
-  experiments[[i]]$errors_filename <- "true_errors_best.csv"
+  candidate_experiments[[i]]$beast2_options$input_filename <- "true_alignment_best.xml"
+  candidate_experiments[[i]]$beast2_options$output_state_filename <- "true_alignment_best.xml.state"
+  candidate_experiments[[i]]$inference_model$mcmc$tracelog$filename <- "true_alignment_best.log"
+  candidate_experiments[[i]]$inference_model$mcmc$treelog$filename <- "true_alignment_best.trees"
+  candidate_experiments[[i]]$inference_model$mcmc$screenlog$filename <- "true_alignment_best.csv"
+  candidate_experiments[[i]]$errors_filename <- "true_errors_best.csv"
 }
 check_experiments(candidate_experiments)
 
