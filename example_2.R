@@ -11,7 +11,7 @@ library(pirouette)
 library(babette)
 library(beautier)
 
-if (1 == 1) {
+if (1 == 2) {
   setwd("~/GitHubs/pirouette_example_2")
 }
 
