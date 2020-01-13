@@ -4,19 +4,12 @@ cache: packages
 
 r_github_packages:
   - Giappo/mbd
-  - jimhester/covr
-  - jimhester/lintr
   - richelbilderbeek/mcbette
   - richelbilderbeek/ribir
   - richelbilderbeek/becosys
   - thijsjanzen/nodeSub
   - richelbilderbeek/pirouette
   - richelbilderbeek/peregrine
-  - MangoTheCat/goodpractice
-  - ropensci/spelling
-
-bioc_packages:
-  - ggtree
 
 before_install:
   - echo $TRAVIS_R_VERSION_STRING
@@ -69,9 +62,6 @@ script:
   - if [ ! -f example_2_314/esses_best.latex ]; then echo "file 'esses_best.latex' not found" ; exit 1 ; fi
   - if [ ! -f example_2_314/true_error_violin_best.png ]; then echo "file 'true_error_violin_best.png' not found" ; exit 1 ; fi
   - if [ ! -f example_2_314/true_posterior_best.png ]; then echo "file 'true_posterior_best.png' not found" ; exit 1 ; fi
-  # Check dead links
-  - rm .travis.yml
-  - ./scripts/check_dead_links
 
 after_success:
   - cd ~/GitHubs/pirouette_article; find .
