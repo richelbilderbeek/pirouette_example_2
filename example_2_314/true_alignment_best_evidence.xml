@@ -39,10 +39,10 @@ name="alignment">
                 <alignment idref="true_alignment_evidence"/>
             </taxonset>
         </tree>
-        <parameter id="kappa1.s:true_alignment_evidence" lower="0.0" name="stateNode">2.0</parameter>
-        <parameter id="kappa2.s:true_alignment_evidence" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="kappa.s:true_alignment_evidence" lower="0.0" name="stateNode">2.0</parameter>
         <parameter id="freqParameter.s:true_alignment_evidence" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
-        <parameter id="birthRate.t:true_alignment_evidence" name="stateNode">1.0</parameter>
+        <parameter id="bPopSizes.t:true_alignment_evidence" dimension="5" lower="0.0" name="stateNode" upper="380000.0">380.0</parameter>
+        <stateNode id="bGroupSizes.t:true_alignment_evidence" spec="parameter.IntegerParameter" dimension="5">1</stateNode>
     </state>
 
     <init id="RandomTree.t:true_alignment_evidence" spec="beast.evolution.tree.RandomTree" estimate="false" initial="@Tree.t:true_alignment_evidence" taxa="@true_alignment_evidence">
@@ -53,20 +53,14 @@ name="alignment">
 
     <distribution id="posterior" spec="util.CompoundDistribution">
         <distribution id="prior" spec="util.CompoundDistribution">
-            <distribution id="YuleModel.t:true_alignment_evidence" spec="beast.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:true_alignment_evidence" tree="@Tree.t:true_alignment_evidence"/>
-            <prior id="YuleBirthRatePrior.t:true_alignment_evidence" name="distribution" x="@birthRate.t:true_alignment_evidence">
-                <Uniform id="Uniform.100" name="distr" upper="Infinity"/>
-            </prior>
-            <prior id="kappa1Prior.s:true_alignment_evidence" name="distribution" x="@kappa1.s:true_alignment_evidence">
+            <distribution id="BayesianSkyline.t:true_alignment_evidence" spec="BayesianSkyline" groupSizes="@bGroupSizes.t:true_alignment_evidence" popSizes="@bPopSizes.t:true_alignment_evidence">
+                <treeIntervals id="BSPTreeIntervals.t:true_alignment_evidence" spec="TreeIntervals" tree="@Tree.t:true_alignment_evidence"/>
+            </distribution>
+            <distribution id="MarkovChainedPopSizes.t:true_alignment_evidence" spec="beast.math.distributions.MarkovChainDistribution" jeffreys="true" parameter="@bPopSizes.t:true_alignment_evidence"/>
+            <prior id="KappaPrior.s:true_alignment_evidence" name="distribution" x="@kappa.s:true_alignment_evidence">
                 <LogNormal id="LogNormalDistributionModel.0" name="distr">
-                    <parameter id="RealParameter.0" estimate="false" name="M">1</parameter>
+                    <parameter id="RealParameter.0" estimate="false" name="M">1.0</parameter>
                     <parameter id="RealParameter.1" estimate="false" lower="0" name="S" upper="Infinity">1.25</parameter>
-                </LogNormal>
-            </prior>
-            <prior id="kappa2Prior.s:true_alignment_evidence" name="distribution" x="@kappa2.s:true_alignment_evidence">
-                <LogNormal id="LogNormalDistributionModel.1" name="distr">
-                    <parameter id="RealParameter.2" estimate="false" name="M">1</parameter>
-                    <parameter id="RealParameter.3" estimate="false" lower="0" name="S" upper="Infinity">1.25</parameter>
                 </LogNormal>
             </prior>
         </distribution>
@@ -76,7 +70,7 @@ name="alignment">
                     <parameter id="mutationRate.s:true_alignment_evidence" estimate="false" name="mutationRate">1.0</parameter>
                     <parameter id="gammaShape.s:true_alignment_evidence" estimate="false" name="shape">1.0</parameter>
                     <parameter id="proportionInvariant.s:true_alignment_evidence" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="tn93.s:true_alignment_evidence" spec="TN93" kappa1="@kappa1.s:true_alignment_evidence" kappa2="@kappa2.s:true_alignment_evidence">
+                    <substModel id="hky.s:true_alignment_evidence" spec="HKY" kappa="@kappa.s:true_alignment_evidence">
                         <frequencies id="estimatedFreqs.s:true_alignment_evidence" spec="Frequencies" frequencies="@freqParameter.s:true_alignment_evidence"/>
                     </substModel>
                 </siteModel>
@@ -87,25 +81,27 @@ name="alignment">
         </distribution>
     </distribution>
 
-    <operator id="YuleBirthRateScaler.t:true_alignment_evidence" spec="ScaleOperator" parameter="@birthRate.t:true_alignment_evidence" scaleFactor="0.75" weight="3.0"/>
+    <operator id="popSizesScaler.t:true_alignment_evidence" spec="ScaleOperator" parameter="@bPopSizes.t:true_alignment_evidence" scaleFactor="0.75" weight="15.0"/>
 
-    <operator id="YuleModelTreeScaler.t:true_alignment_evidence" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:true_alignment_evidence" weight="3.0"/>
+    <operator id="groupSizesDelta.t:true_alignment_evidence" spec="DeltaExchangeOperator" integer="true" weight="6.0">
+        <intparameter idref="bGroupSizes.t:true_alignment_evidence"/>
+    </operator>
 
-    <operator id="YuleModelTreeRootScaler.t:true_alignment_evidence" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:true_alignment_evidence" weight="3.0"/>
+    <operator id="BayesianSkylineTreeScaler.t:true_alignment_evidence" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:true_alignment_evidence" weight="3.0"/>
 
-    <operator id="YuleModelUniformOperator.t:true_alignment_evidence" spec="Uniform" tree="@Tree.t:true_alignment_evidence" weight="30.0"/>
+    <operator id="BayesianSkylineTreeRootScaler.t:true_alignment_evidence" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:true_alignment_evidence" weight="3.0"/>
 
-    <operator id="YuleModelSubtreeSlide.t:true_alignment_evidence" spec="SubtreeSlide" tree="@Tree.t:true_alignment_evidence" weight="15.0"/>
+    <operator id="BayesianSkylineUniformOperator.t:true_alignment_evidence" spec="Uniform" tree="@Tree.t:true_alignment_evidence" weight="30.0"/>
 
-    <operator id="YuleModelNarrow.t:true_alignment_evidence" spec="Exchange" tree="@Tree.t:true_alignment_evidence" weight="15.0"/>
+    <operator id="BayesianSkylineSubtreeSlide.t:true_alignment_evidence" spec="SubtreeSlide" tree="@Tree.t:true_alignment_evidence" weight="15.0"/>
 
-    <operator id="YuleModelWide.t:true_alignment_evidence" spec="Exchange" isNarrow="false" tree="@Tree.t:true_alignment_evidence" weight="3.0"/>
+    <operator id="BayesianSkylineNarrow.t:true_alignment_evidence" spec="Exchange" tree="@Tree.t:true_alignment_evidence" weight="15.0"/>
 
-    <operator id="YuleModelWilsonBalding.t:true_alignment_evidence" spec="WilsonBalding" tree="@Tree.t:true_alignment_evidence" weight="3.0"/>
+    <operator id="BayesianSkylineWide.t:true_alignment_evidence" spec="Exchange" isNarrow="false" tree="@Tree.t:true_alignment_evidence" weight="3.0"/>
 
-    <operator id="kappa1Scaler.s:true_alignment_evidence" spec="ScaleOperator" parameter="@kappa1.s:true_alignment_evidence" scaleFactor="0.5" weight="0.1"/>
+    <operator id="BayesianSkylineWilsonBalding.t:true_alignment_evidence" spec="WilsonBalding" tree="@Tree.t:true_alignment_evidence" weight="3.0"/>
 
-    <operator id="kappa2Scaler.s:true_alignment_evidence" spec="ScaleOperator" parameter="@kappa2.s:true_alignment_evidence" scaleFactor="0.5" weight="0.1"/>
+    <operator id="KappaScaler.s:true_alignment_evidence" spec="ScaleOperator" parameter="@kappa.s:true_alignment_evidence" scaleFactor="0.5" weight="0.1"/>
 
     <operator id="FrequenciesExchanger.s:true_alignment_evidence" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
         <parameter idref="freqParameter.s:true_alignment_evidence"/>
@@ -117,11 +113,11 @@ name="alignment">
         <log idref="prior"/>
         <log idref="treeLikelihood.true_alignment_evidence"/>
         <log id="TreeHeight.t:true_alignment_evidence" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:true_alignment_evidence"/>
-        <log idref="kappa1.s:true_alignment_evidence"/>
-        <log idref="kappa2.s:true_alignment_evidence"/>
+        <log idref="kappa.s:true_alignment_evidence"/>
         <log idref="freqParameter.s:true_alignment_evidence"/>
-        <log idref="YuleModel.t:true_alignment_evidence"/>
-        <log idref="birthRate.t:true_alignment_evidence"/>
+        <log idref="BayesianSkyline.t:true_alignment_evidence"/>
+        <log idref="bPopSizes.t:true_alignment_evidence"/>
+        <log idref="bGroupSizes.t:true_alignment_evidence"/>
     </logger>
 
     <logger id="screenlog" logEvery="1000">
