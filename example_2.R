@@ -1,19 +1,7 @@
-# Code of example 2
-#
-# Works under Linux and MacOS only
-#
-#
-#
-
-
 suppressMessages(library(ggplot2))
 library(pirouette)
 library(babette)
 library(beautier)
-
-if (1 == 2) {
-  setwd("~/GitHubs/pirouette_example_2")
-}
 
 root_folder <- getwd()
 example_no <- 2
