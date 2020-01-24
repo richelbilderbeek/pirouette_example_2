@@ -1,7 +1,6 @@
 suppressMessages(library(ggplot2))
 library(pirouette)
 library(babette)
-library(beautier)
 
 root_folder <- getwd()
 example_no <- 2
@@ -11,7 +10,9 @@ dir.create(example_folder, showWarnings = FALSE, recursive = TRUE)
 setwd(example_folder)
 set.seed(rng_seed)
 testit::assert(is_beast2_installed())
+
 phylogeny <- create_yule_tree(n_taxa = 6, crown_age = 10)
+ape::write.tree(phylogeny, file = "true_tree.newick")
 
 alignment_params <- create_alignment_params(
   sim_tral_fun = get_sim_tral_with_std_nsm_fun(
