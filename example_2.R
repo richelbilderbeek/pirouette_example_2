@@ -2,7 +2,7 @@ library(pirouette)
 library(babette)
 
 # Constants
-is_testing <- is_on_travis()
+is_testing <- is_on_ci()
 example_no <- 2
 rng_seed <- 314
 folder_name <- paste0("example_", example_no, "_", rng_seed)
